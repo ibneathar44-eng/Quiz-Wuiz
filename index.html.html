@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Wuiz</title>
+
+<style>
+body {
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#1d2671,#c33764);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    color:white;
+}
+
+.quiz-box{
+    width:400px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(15px);
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+    text-align:center;
+    animation:fadeIn 1s ease;
+    position:relative;
+}
+
+/* 🔴 RESET BUTTON TOP CORNER */
+.reset-btn{
+    position:absolute;
+    top:10px;
+    right:10px;
+    background:#ff3b3b;
+    color:white;
+    border:none;
+    padding:6px 10px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:12px;
+    transition:0.3s;
+}
+
+.reset-btn:hover{
+    background:#ff0000;
+    transform:scale(1.1);
+}
+
+.question{
+    font-size:18px;
+    margin-bottom:15px;
+    margin-top:30px;
+}
+
+.option{
+    display:block;
+    margin:10px 0;
+    padding:10px;
+    background:#ffffff22;
+    border-radius:10px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.option:hover{
+    background:#00c6ff;
+    transform:scale(1.05);
+}
+
+.correct{ background:#00ff99 !important; }
+.wrong{ background:#ff4d4d !important; }
+
+button{
+    margin-top:15px;
+    padding:10px 20px;
+    border:none;
+    border-radius:10px;
+    background:#00c6ff;
+    color:white;
+    cursor:pointer;
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="quiz-box">
+
+    <!-- 🔴 RESET BUTTON -->
+    <button class="reset-btn" onclick="resetQuiz()">Reset</button>
+
+    <div class="question" id="question"></div>
+    <div id="options"></div>
+
+    <button onclick="nextQuestion()">Next</button>
+
+    <div id="score"></div>
+</div>
+
+<audio id="clickSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+
+<script>
+
+let questions = [
+{q:"Capital of France?", a:"Paris", b:"Rome", c:"Berlin", d:"Madrid"},
+{q:"Capital of Japan?", a:"Tokyo", b:"Seoul", c:"Beijing", d:"Bangkok"},
+{q:"Which planet is known as Blue Planet?", a:"Earth", b:"Neptune", c:"Mars", d:"Venus"},
+{q:"Who wrote Romeo and Juliet?", a:"Shakespeare", b:"Homer", c:"Milton", d:"Chaucer"},
+{q:"Largest continent?", a:"Asia", b:"Africa", c:"Europe", d:"Australia"},
+{q:"Gas most in atmosphere?", a:"Nitrogen", b:"Oxygen", c:"CO2", d:"Hydrogen"},
+{q:"Capital of Italy?", a:"Rome", b:"Paris", c:"Athens", d:"Madrid"},
+{q:"Who discovered gravity?", a:"Newton", b:"Einstein", c:"Tesla", d:"Galileo"}
+];
+
+let current = 0;
+let score = 0;
+let quizOrder = [];
+
+function shuffle(arr){
+    return arr.sort(()=>Math.random()-0.5);
+}
+
+function startQuiz(){
+    quizOrder = shuffle([...questions]);
+    current = 0;
+    score = 0;
+    loadQuestion();
+}
+
+function loadQuestion(){
+    let q = quizOrder[current];
+
+    document.getElementById("question").innerText =
+        (current+1)+". "+q.q;
+
+    let opts = [q.a,q.b,q.c,q.d];
+    opts.sort(()=>Math.random()-0.5);
+
+    let html = "";
+    opts.forEach(opt=>{
+        html += `<div class="option" onclick="selectAnswer(this,'${opt}','${q.a}')">${opt}</div>`;
+    });
+
+    document.getElementById("options").innerHTML = html;
+}
+
+function selectAnswer(el, selected, correct){
+    let sound = document.getElementById("clickSound");
+    sound.play().catch(()=>{});
+
+    if(navigator.vibrate) navigator.vibrate(100);
+
+    let options = document.querySelectorAll(".option");
+
+    options.forEach(o=>{
+        if(o.innerText === correct) o.classList.add("correct");
+        else o.classList.add("wrong");
+        o.style.pointerEvents = "none";
+    });
+
+    if(selected === correct) score++;
+}
+
+function nextQuestion(){
+    current++;
+    if(current < quizOrder.length){
+        loadQuestion();
+    } else {
+        document.querySelector(".quiz-box").innerHTML =
+        `<h2>Quiz Completed</h2>
+         <h3>Your Score: ${score}/${quizOrder.length}</h3>
+         <button onclick="location.reload()">Play Again</button>`;
+    }
+}
+
+/* 🔁 RESET FUNCTION */
+function resetQuiz(){
+    startQuiz();
+}
+
+startQuiz();
+
+</script>
+
+</body>
+</html>
