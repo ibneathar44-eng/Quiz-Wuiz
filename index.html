@@ -25,11 +25,9 @@ body {
     padding:20px;
     box-shadow:0 10px 30px rgba(0,0,0,0.4);
     text-align:center;
-    animation:fadeIn 1s ease;
     position:relative;
 }
 
-/* 🔴 RESET BUTTON TOP CORNER */
 .reset-btn{
     position:absolute;
     top:10px;
@@ -40,19 +38,11 @@ body {
     padding:6px 10px;
     border-radius:8px;
     cursor:pointer;
-    font-size:12px;
-    transition:0.3s;
-}
-
-.reset-btn:hover{
-    background:#ff0000;
-    transform:scale(1.1);
 }
 
 .question{
     font-size:18px;
-    margin-bottom:15px;
-    margin-top:30px;
+    margin:30px 0 15px;
 }
 
 .option{
@@ -82,11 +72,6 @@ button{
     color:white;
     cursor:pointer;
 }
-
-@keyframes fadeIn{
-    from{opacity:0; transform:translateY(20px);}
-    to{opacity:1; transform:translateY(0);}
-}
 </style>
 </head>
 
@@ -94,15 +79,13 @@ button{
 
 <div class="quiz-box">
 
-    <!-- 🔴 RESET BUTTON -->
-    <button class="reset-btn" onclick="resetQuiz()">Reset</button>
+<button class="reset-btn" onclick="resetQuiz()">Reset</button>
 
-    <div class="question" id="question"></div>
-    <div id="options"></div>
+<div class="question" id="question"></div>
+<div id="options"></div>
 
-    <button onclick="nextQuestion()">Next</button>
+<button onclick="nextQuestion()">Next</button>
 
-    <div id="score"></div>
 </div>
 
 <audio id="clickSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
@@ -110,15 +93,62 @@ button{
 <script>
 
 let questions = [
-{q:"Capital of France?", a:"Paris", b:"Rome", c:"Berlin", d:"Madrid"},
-{q:"Capital of Japan?", a:"Tokyo", b:"Seoul", c:"Beijing", d:"Bangkok"},
-{q:"Which planet is known as Blue Planet?", a:"Earth", b:"Neptune", c:"Mars", d:"Venus"},
-{q:"Who wrote Romeo and Juliet?", a:"Shakespeare", b:"Homer", c:"Milton", d:"Chaucer"},
-{q:"Largest continent?", a:"Asia", b:"Africa", c:"Europe", d:"Australia"},
-{q:"Gas most in atmosphere?", a:"Nitrogen", b:"Oxygen", c:"CO2", d:"Hydrogen"},
-{q:"Capital of Italy?", a:"Rome", b:"Paris", c:"Athens", d:"Madrid"},
-{q:"Who discovered gravity?", a:"Newton", b:"Einstein", c:"Tesla", d:"Galileo"}
+{q:"Capital of Canada?", a:"Ottawa", b:"Toronto", c:"Vancouver", d:"Montreal"},
+{q:"Closest planet to Sun?", a:"Mercury", b:"Venus", c:"Earth", d:"Mars"},
+{q:"Largest ocean?", a:"Pacific", b:"Atlantic", c:"Indian", d:"Arctic"},
+{q:"Mona Lisa painter?", a:"Leonardo da Vinci", b:"Van Gogh", c:"Picasso", d:"Michelangelo"},
+{q:"Boiling point of water?", a:"100°C", b:"90°C", c:"80°C", d:"120°C"},
+{q:"Smallest prime number?", a:"2", b:"1", c:"3", d:"5"},
+{q:"Fastest land animal?", a:"Cheetah", b:"Lion", c:"Tiger", d:"Leopard"},
+{q:"Currency of UK?", a:"Pound", b:"Euro", c:"Dollar", d:"Rupee"},
+{q:"Plants use which gas?", a:"Carbon Dioxide", b:"Oxygen", c:"Nitrogen", d:"Hydrogen"},
+{q:"Continents count?", a:"7", b:"6", c:"5", d:"8"},
+
+{q:"National sport of Pakistan?", a:"Field Hockey", b:"Cricket", c:"Football", d:"Squash"},
+{q:"Which organ purifies blood?", a:"Kidney", b:"Heart", c:"Lungs", d:"Liver"},
+{q:"Pizza origin country?", a:"Italy", b:"France", c:"USA", d:"Spain"},
+{q:"Vitamin from sunlight?", a:"Vitamin D", b:"Vitamin A", c:"Vitamin B", d:"Vitamin C"},
+{q:"Tallest mountain?", a:"Mount Everest", b:"K2", c:"Nanga Parbat", d:"Makalu"},
+{q:"Animal that gives wool?", a:"Sheep", b:"Goat", c:"Cow", d:"Camel"},
+{q:"Capital of Turkey?", a:"Ankara", b:"Istanbul", c:"Izmir", d:"Bursa"},
+{q:"Human body bones?", a:"206", b:"201", c:"210", d:"199"},
+{q:"Hardest substance?", a:"Diamond", b:"Gold", c:"Iron", d:"Silver"},
+{q:"Land of Rising Sun?", a:"Japan", b:"China", c:"Thailand", d:"Korea"},
+
+{q:"Longest river?", a:"Nile", b:"Amazon", c:"Indus", d:"Yangtze"},
+{q:"Temperature tool?", a:"Thermometer", b:"Barometer", c:"Altimeter", d:"Hygrometer"},
+{q:"Hexagon sides?", a:"6", b:"5", c:"7", d:"8"},
+{q:"Which is mammal?", a:"Whale", b:"Shark", c:"Octopus", d:"Tuna"},
+{q:"Largest desert?", a:"Sahara", b:"Gobi", c:"Arabian", d:"Kalahari"},
+{q:"Great Wall country?", a:"China", b:"India", c:"Japan", d:"Mongolia"},
+{q:"Capital of Germany?", a:"Berlin", b:"Munich", c:"Frankfurt", d:"Hamburg"},
+{q:"Liquid metal?", a:"Mercury", b:"Iron", c:"Gold", d:"Copper"},
+{q:"Flightless bird?", a:"Ostrich", b:"Eagle", c:"Sparrow", d:"Parrot"},
+{q:"Blood pump organ?", a:"Heart", b:"Brain", c:"Lungs", d:"Kidney"},
+
+{q:"Largest island?", a:"Greenland", b:"Australia", c:"Borneo", d:"Madagascar"},
+{q:"Which is not planet?", a:"Pluto", b:"Mars", c:"Venus", d:"Earth"},
+{q:"Capital of Australia?", a:"Canberra", b:"Sydney", c:"Melbourne", d:"Perth"},
+{q:"Humans breathe?", a:"Oxygen", b:"CO2", c:"Nitrogen", d:"Helium"},
+{q:"Fastest bird?", a:"Peregrine Falcon", b:"Eagle", c:"Owl", d:"Hawk"},
+{q:"Currency of Japan?", a:"Yen", b:"Dollar", c:"Won", d:"Euro"},
+{q:"Freezing point water?", a:"0°C", b:"10°C", c:"5°C", d:"-10°C"},
+{q:"2022 World Cup host?", a:"Qatar", b:"Russia", c:"USA", d:"Germany"},
+{q:"Breathing organ?", a:"Lungs", b:"Heart", c:"Kidney", d:"Brain"},
+{q:"Smallest continent?", a:"Australia", b:"Europe", c:"Antarctica", d:"Africa"},
+
+{q:"First rainbow color?", a:"Red", b:"Blue", c:"Green", d:"Yellow"},
+{q:"Hottest planet?", a:"Venus", b:"Mercury", c:"Mars", d:"Jupiter"},
+{q:"Taj Mahal country?", a:"India", b:"Pakistan", c:"Bangladesh", d:"Nepal"},
+{q:"Largest mammal?", a:"Blue Whale", b:"Elephant", c:"Giraffe", d:"Rhino"},
+{q:"Capital of Saudi Arabia?", a:"Riyadh", b:"Jeddah", c:"Mecca", d:"Medina"},
+{q:"Language of Brazil?", a:"Portuguese", b:"Spanish", c:"English", d:"French"},
+{q:"Tallest animal?", a:"Giraffe", b:"Elephant", c:"Horse", d:"Camel"},
+{q:"Eiffel Tower country?", a:"France", b:"Italy", c:"Germany", d:"Spain"},
+{q:"Largest planet?", a:"Jupiter", b:"Saturn", c:"Earth", d:"Mars"},
+{q:"Smallest ocean?", a:"Arctic", b:"Indian", c:"Atlantic", d:"Pacific"}
 ];
+
 
 let current = 0;
 let score = 0;
@@ -153,8 +183,7 @@ function loadQuestion(){
 }
 
 function selectAnswer(el, selected, correct){
-    let sound = document.getElementById("clickSound");
-    sound.play().catch(()=>{});
+    document.getElementById("clickSound").play().catch(()=>{});
 
     if(navigator.vibrate) navigator.vibrate(100);
 
@@ -181,7 +210,6 @@ function nextQuestion(){
     }
 }
 
-/* 🔁 RESET FUNCTION */
 function resetQuiz(){
     startQuiz();
 }
