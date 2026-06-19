@@ -211,6 +211,11 @@ function nextQuestion(){
 }
 
 function resetQuiz(){
+
+    let attempted = current;
+
+    alert(`You attempted ${attempted} questions.\nYour Score: ${score}/${attempted}`);
+
     startQuiz();
 }
 
